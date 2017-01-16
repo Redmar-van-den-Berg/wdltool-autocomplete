@@ -1,0 +1,29 @@
+_wdl()
+{   
+    local cur prev opts
+    COMPREPLY=()
+    cur="${COMP_WORDS[COMP_CWORD]}"
+    prev="${COMP_WORDS[COMP_CWORD-1]}"
+    opts="validate inputs highlight parse"
+    
+    # The default options
+    if [[ ${prev} == wdltool ]] ; then
+        COMPREPLY=( $(compgen -W "${opts}" -- ${cur}) )
+        return 0
+    fi
+    
+    # the commands that take a .wdl file
+    if [[ ${prev} == inputs || ${prev} == parse || ${prev} == validate || ${prev} == highlight ]] ;then
+        local wdl_files=$(for x in `ls -1 *.wdl`; do echo ${x} ; done )
+        COMPREPLY=( $(compgen -W "${wdl_files}" -- ${cur}) )
+        return 0
+    fi  
+    
+    # The highlight command
+    prev2="${COMP_WORDS[COMP_CWORD-2]}"
+    if [[ ${prev} == *.wdl && ${prev2} == highlight ]] ; then
+        COMPREPLY=( $(compgen -W "html console" -- ${cur}) )
+        return 0
+    fi  
+}   
+complete -F _wdl wdltool
