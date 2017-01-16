@@ -14,7 +14,7 @@ _wdl()
     
     # the commands that take a .wdl file
     if [[ ${prev} == inputs || ${prev} == parse || ${prev} == validate || ${prev} == highlight ]] ;then
-        local wdl_files=$(for x in `ls -1 *.wdl`; do echo ${x} ; done )
+        local wdl_files=$(for x in `ls -1 *.wdl 2>/dev/null`; do echo ${x} ; done )
         COMPREPLY=( $(compgen -W "${wdl_files}" -- ${cur}) )
         return 0
     fi  
